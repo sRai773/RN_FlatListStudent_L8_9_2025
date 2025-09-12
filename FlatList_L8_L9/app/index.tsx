@@ -1,14 +1,34 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import colors from "@/styles/colors";
 import defaultStyles from "@/styles/defaultStyles";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 
 export default function Index() {
+
+  type dataType = {
+    id: string; // refer to the unique identifier
+    title: string; //Text we will show in list 
+  }
+
+  //Using all caps because data array will not change during use
+  const DATA: dataType[] = [
+    {id: "1", title: "First item"},
+    {id: "2", title: "Second item"},
+    {id: "3", title: "Third item"},
+    {id: "4", title: "Fourth item"},
+  ];
+
+  // create a simple function telling me what was selected
+  const selectedList = (item: dataType) => {
+    console.log(item.title);
+    setSelectedId(item.id);
+  };
+
+  const [selectedId, setSelectedId] = useState<string>("1");
   return (
     <View style={defaultStyles.container}>
       <View style={defaultStyles.titleContainer}>
@@ -16,7 +36,17 @@ export default function Index() {
       </View>
       <View style={[defaultStyles.textContainer, { flex: 1 }]}>
         <View style={styles.flatlist}>
-          <Text>This is where our list will go</Text>
+          <FlatList 
+            data={DATA}
+            keyExtractor={(item: dataType) => item.id}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => selectedList(item)}>
+                <View style = {styles.FlatListRow}>
+                  <Text>{item.title}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
         </View>
       </View>
     </View>
@@ -26,6 +56,11 @@ export default function Index() {
 const styles = StyleSheet.create({
   flatlist: {
     alignItems: "center",
+  },
+  FlatListRow: {
+    backgroundColor: "gold",
+    marginBottom: 10,
+    padding: 5,
   },
   titleContainer: {
     marginTop: 5,
