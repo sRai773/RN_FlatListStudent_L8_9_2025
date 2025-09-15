@@ -1,4 +1,7 @@
+import ListItemSseparator from "@/components/ListItemSeperator";
+import colors from "@/styles/colors";
 import defaultStyles from "@/styles/defaultStyles";
+import { useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -7,20 +10,9 @@ import {
   View
 } from "react-native";
 
+import { DATA, dataType } from "@/data/appData";
+
 export default function Index() {
-
-  type dataType = {
-    id: string; // refer to the unique identifier
-    title: string; //Text we will show in list 
-  }
-
-  //Using all caps because data array will not change during use
-  const DATA: dataType[] = [
-    {id: "1", title: "First item"},
-    {id: "2", title: "Second item"},
-    {id: "3", title: "Third item"},
-    {id: "4", title: "Fourth item"},
-  ];
 
   // create a simple function telling me what was selected
   const selectedList = (item: dataType) => {
@@ -38,11 +30,28 @@ export default function Index() {
         <View style={styles.flatlist}>
           <FlatList 
             data={DATA}
+            extraData={selectedId}
             keyExtractor={(item: dataType) => item.id}
+            ItemSeparatorComponent={() => 
+              <ListItemSseparator color="black" />}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => selectedList(item)}>
-                <View style = {styles.FlatListRow}>
-                  <Text>{item.title}</Text>
+                <View style = {[styles.FlatListRow, 
+                  {
+                    backgroundColor: item.id === selectedId
+                    ? colors.primary
+                    : colors.secondary,
+                  }
+                ]}>
+                  <Text style = {[styles.titleText,
+                    {
+                      color:
+                        item.id === selectedId
+                          ? colors.text.light
+                          : colors.text.dark
+
+                    }
+                  ]}>{item.title}</Text>
                 </View>
               </TouchableOpacity>
             )}
@@ -61,6 +70,9 @@ const styles = StyleSheet.create({
     backgroundColor: "gold",
     marginBottom: 10,
     padding: 5,
+    width: 300,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
   titleContainer: {
     marginTop: 5,
