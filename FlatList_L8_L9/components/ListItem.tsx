@@ -1,7 +1,7 @@
 import { dataType } from "@/data/appData";
 import colors from "@/styles/colors";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 // declare data type for props here
 // I am giving this LitItem component the data it needs
@@ -15,20 +15,19 @@ type propsType = {
 
 const ListItem:React.FC<propsType> = ({item, isSelected, onPress}) => {
   return (
-    <TouchableOpacity onPress={() => selectedList(item)}>
+    <TouchableOpacity onPress={() => onPress(item)}>
                 <View style = {[styles.FlatListRow, 
                   {
-                    backgroundColor: item.id === selectedId
+                    backgroundColor: isSelected
                     ? colors.primary
                     : colors.secondary,
                   }
                 ]}>
                   <Text style = {[styles.titleText,
                     {
-                      color:
-                        item.id === selectedId
-                          ? colors.text.light
-                          : colors.text.dark
+                     color: isSelected
+                            ? colors.text.light
+                            : colors.text.dark
 
                     }
                   ]}>{item.title}</Text>
